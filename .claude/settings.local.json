@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(curl:*)",
+      "Bash(brew list:*)",
+      "Bash(brew info:*)",
+      "Bash(find:*)",
+      "Bash(rustup --version)",
+      "Bash(cargo --version)",
+      "Bash(rustc:*)",
+      "Bash(rustup:*)",
+      "mcp__filesystem__write_file",
+      "mcp__filesystem__create_directory",
+      "Bash(./utility_scripts/setup/validate_installation.sh:*)"
+    ],
+    "deny": []
+  }
+}

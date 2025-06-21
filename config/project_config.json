@@ -1,0 +1,54 @@
+{
+  "project": {
+    "name": "uthub",
+    "root_path": "/Users/erasmus/DEVELOPER/uthub/",
+    "user": "erasmus",
+    "type": "web_app"
+  },
+  "services": {
+    "backend": {
+      "port": 8001,
+      "health_endpoint": "/health",
+      "start_command": "cd backend && poetry run uvicorn app.main:app --reload --port 8001"
+    },
+    "frontend": {
+      "port": 3502,
+      "health_endpoint": "/",
+      "start_command": "cd frontend && npm run dev"
+    },
+    "database": {
+      "type": "postgresql",
+      "version": "15.2",
+      "port": 5432,
+      "host": "localhost",
+      "user": "erasmus",
+      "extensions": ["pgvector:0.8.0"]
+    }
+  },
+  "monitoring": {
+    "script_path": "~/scripts/claude_monitor.sh",
+    "thresholds": {
+      "ok": 60,
+      "attention": 80,
+      "danger": 90
+    }
+  },
+  "structure": {
+    "docs_path": "docs",
+    "transitions_path": "docs/transitions",
+    "archives_path": "docs/transitions/archives",
+    "protocols_path": "docs/protocols",
+    "backend_path": "backend",
+    "frontend_path": "frontend"
+  },
+  "critical_files": {
+    "pgvector_repo": "backend/pgvector/",
+    "start_script": "backend/start.sh",
+    "claude_instructions": "CLAUDE.md",
+    "machine_instructions": "docs/protocols/INSTRUCTIONS_MACHINE_AUTOMATIQUES.md"
+  },
+  "git": {
+    "main_branch": "main",
+    "remote": "origin"
+  }
+}
