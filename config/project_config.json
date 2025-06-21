@@ -1,8 +1,8 @@
 {
   "project": {
-    "name": "uthub",
-    "root_path": "/Users/erasmus/DEVELOPER/uthub/",
-    "user": "erasmus",
+    "name": "your_project_name",
+    "root_path": "/path/to/your/project/",
+    "user": "your_username",
     "type": "web_app"
   },
   "services": {
@@ -21,7 +21,7 @@
       "version": "15.2",
       "port": 5432,
       "host": "localhost",
-      "user": "erasmus",
+      "user": "your_username",
       "extensions": ["pgvector:0.8.0"]
     }
   },

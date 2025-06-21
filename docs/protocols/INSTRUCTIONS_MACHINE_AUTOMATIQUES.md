@@ -6,7 +6,7 @@
 ```
 IF session.start() THEN
     EXECUTE ~/scripts/claude_monitor.sh 1
-    READ /Users/erasmus/DEVELOPER/uthub/TRANSITION_NOTES_*.md (latest)
+    READ project_root + "TRANSITION_NOTES_*.md" (latest)
     SET monitoring_mode = ACTIVE
 END IF
 ```
@@ -46,7 +46,7 @@ END IF
 FUNCTION protocole_fin_session():
     # 1. Créer document transition (RACINE pour lecture facile)
     transition_file = "TRANSITION_NOTES_" + date.today().format("YYYYMMDD") + "_" + time.now().format("HHMM") + ".md"
-    CREATE_FILE("/Users/erasmus/DEVELOPER/uthub/" + transition_file, generate_transition_content())
+    CREATE_FILE(project_root + transition_file, generate_transition_content())
     
     # 1.1. Archiver anciens transitions si >5 en racine  
     IF count_transition_files_in_root() > 5 THEN
@@ -82,7 +82,7 @@ END FUNCTION
 ```
 FUNCTION archive_old_transitions():
     # Identifier transitions en racine (sauf le plus récent)
-    transition_files = list_files("/Users/erasmus/DEVELOPER/uthub/TRANSITION_NOTES_*.md")
+    transition_files = list_files(project_root + "TRANSITION_NOTES_*.md")
     sort_by_date_desc(transition_files)
     
     # Garder seulement le plus récent en racine
@@ -95,7 +95,7 @@ FUNCTION archive_old_transitions():
         month = date_part.substring(4, 6)
         
         # Créer dossier archive si nécessaire
-        archive_dir = "/Users/erasmus/DEVELOPER/uthub/docs/transitions/archives/" + year + "/" + month + "/"
+        archive_dir = project_root + "docs/transitions/archives/" + year + "/" + month + "/"
         CREATE_DIRECTORY_IF_NOT_EXISTS(archive_dir)
         
         # Déplacer fichier
@@ -156,6 +156,22 @@ FUNCTION generate_transition_content():
 END FUNCTION
 ```
 
+## FONCTIONS UTILITAIRES
+
+### Configuration
+```python
+FUNCTION READ_CONFIG(key):
+    config_file = ".config"
+    config_lines = READ_FILE(config_file)
+    FOR line IN config_lines:
+        IF line.startswith(key + "="):
+            RETURN line.split("=")[1].strip()
+        END IF
+    END FOR
+    RETURN ""
+END FUNCTION
+```
+
 ## VARIABLES SYSTÈME OBLIGATOIRES
 
 ### État de session (base)
@@ -173,7 +189,7 @@ code_modified = FALSE
 # Variables session globales
 session_active = TRUE
 session_start_time = GET_CURRENT_TIMESTAMP()
-project_root = "/Users/erasmus/DEVELOPER/uthub/"
+project_root = READ_CONFIG("PROJECT_ROOT")
 
 # Variables monitoring unifiées
 message_counter = 0
@@ -623,9 +639,9 @@ FUNCTION generate_complete_transition_content():
     # SECTION 5: État actuel système (CURRENT_STATE)
     content += "## 🎯 État actuel système\n"
     content += "### Services running:\n"
-    content += "- Backend: " + CHECK_SERVICE_STATUS("localhost:8001") + "\n"
-    content += "- Frontend: " + CHECK_SERVICE_STATUS("localhost:3502") + "\n"
-    content += "- PostgreSQL: " + CHECK_SERVICE_STATUS("localhost:5432") + "\n"
+    content += "- Backend: " + CHECK_SERVICE_STATUS("localhost:" + READ_config("BACKEND_PORT")) + "\n"
+    content += "- Frontend: " + CHECK_SERVICE_STATUS("localhost:" + read_config("FRONTEND_PORT")) + "\n"
+    content += "- PostgreSQL: " + CHECK_SERVICE_STATUS("localhost:" + read_config("DATABASE_PORT")) + "\n"
     content += "### Infrastructure:\n"
     content += "- Git status: " + EXECUTE("git status --short") + "\n"
     content += "- Commits non pushés: " + EXECUTE("git log origin/main..HEAD --oneline") + "\n\n"
@@ -666,7 +682,7 @@ FUNCTION generate_complete_transition_content():
     content += "### Première action OBLIGATOIRE:\n"
     content += "1. `cd " + project_root + "`\n"
     content += "2. Lire ce document ENTIÈREMENT avant tout travail\n"
-    content += "3. Vérifier backend : `curl http://localhost:8001/health`\n"
+    content += "3. Vérifier backend : `curl http://localhost:" + READ_CONFIG("BACKEND_PORT") + "/health`\n"
     content += "4. Si backend down : `cd backend && poetry run uvicorn app.main:app --reload --port 8001`\n\n"
     content += "### Contexte critique:\n"
     content += "- **Monitoring requis** : Utiliser " + script_path + " pour surveillance continue\n"
@@ -865,7 +881,7 @@ END FUNCTION
 
 FUNCTION CHECK_WORKING_DIRECTORY():
     current_dir = GET_CURRENT_DIRECTORY()
-    expected_dir = "/Users/erasmus/DEVELOPER/uthub/"
+    expected_dir = project_root
     
     IF current_dir == expected_dir THEN
         RETURN {"status": "✅", "detail": "Répertoire correct: " + current_dir}
@@ -901,9 +917,9 @@ FUNCTION CHECK_TODO_LIST():
 END FUNCTION
 
 FUNCTION CHECK_SERVICES_STATUS():
-    backend_status = TEST_URL("http://localhost:8001/health")
-    frontend_status = TEST_URL("http://localhost:3502")
-    postgres_status = TEST_CONNECTION("localhost:5432")
+    backend_status = TEST_URL("http://localhost:" + READ_CONFIG("BACKEND_PORT") + "/health")
+    frontend_status = TEST_URL("http://localhost:" + READ_CONFIG("FRONTEND_PORT"))
+    postgres_status = TEST_CONNECTION("localhost:" + READ_CONFIG("DATABASE_PORT"))
     
     services_up = 0
     details = []

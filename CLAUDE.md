@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 🤖 Project Overview
 
-This repository contains **Routine Claude Agnostique** - an advanced meta-framework for Claude AI workflow management and session continuity. Originally developed for the Uthub project, it has evolved into a project-agnostic system that enables Claude assistants to maintain perfect continuity across sessions, avoid token limit failures, and work collaboratively on complex, long-term projects.
+This repository contains **Routine Claude Agnostique** - an advanced meta-framework for Claude AI workflow management and session continuity. Originally developed as a project-specific system, it has evolved into a project-agnostic framework that enables Claude assistants to maintain perfect continuity across sessions, avoid token limit failures, and work collaboratively on complex, long-term projects.
 
 **This is NOT a traditional software project** - it's a sophisticated automation pipeline and meta-cognitive framework for Claude workflow management.
 
@@ -143,6 +143,7 @@ When multiple Claude assistants work together on a project:
 2. **Complete Reading**: Full CLAUDE.md must be read before any action
 3. **Token Monitoring**: Surveillance system must remain active
 4. **Transition Documentation**: All sessions must generate handoff notes
+5. **Error Accountability**: All Claude errors MUST be documented in `/docs/erreurs_claude/`
 
 ## 📚 Documentation Structure
 
@@ -153,6 +154,7 @@ All development documents MUST be organized in `/docs/`:
 - **Development** → `/docs/development/` (technical documents)
 - **Migrations** → `/docs/migrations/` (migration and handover guides)
 - **Integration** → `/docs/integration/` (external integrations and APIs)
+- **Error Reports** → `/docs/erreurs_claude/` (Claude error incidents and lessons learned)
 
 ### **Utility Scripts**
 All non-deterministic scripts MUST be organized in `/utility_scripts/`:

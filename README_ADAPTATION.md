@@ -1,7 +1,7 @@
 # 🤖 Routine Claude Agnostique - Guide d'Adaptation
 
 ## 📋 Vue d'ensemble
-Cette copie contient le système pipeline automatique complet développé pour Uthub, rendu agnostique pour adaptation à n'importe quel projet.
+Cette copie contient le système pipeline automatique complet, rendu agnostique pour adaptation à n'importe quel projet.
 
 ## 📁 Structure copiée
 ```
@@ -27,7 +27,7 @@ Projet_50_routineClaude_agnostique/
 - Modifier les chemins dans la documentation structure (ligne 175-190)
 
 ### 2. **Adapter INSTRUCTIONS_MACHINE_AUTOMATIQUES.md**
-- **CRITIQUE** : Changer `project_root = "/Users/erasmus/DEVELOPER/uthub/"` (ligne 169)
+- **CRITIQUE** : Changer `project_root = READ_CONFIG("PROJECT_ROOT")` (utilise le fichier .config)
 - Adapter les chemins dans les fonctions de validation contexte
 - Modifier les ports des services si différents (8001, 3502, 5432)
 - Ajuster les fichiers critiques à vérifier
@@ -97,5 +97,5 @@ critical_files = [
 
 ---
 *Routine Claude v1.1 - Système pipeline universel*
-*Adapté depuis Uthub - 20 juin 2025*
+*Framework Claude Agnostique - 21 juin 2025*
 EOF < /dev/null
